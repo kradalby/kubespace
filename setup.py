@@ -1,5 +1,5 @@
 __author__ = "Kristoffer Dalby <kradalby@kradalby.no>"
-__version__ = "0.0.0"
+__version__ = "0.0.1"
 
 from setuptools import setup
 import sys

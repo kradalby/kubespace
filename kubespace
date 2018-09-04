@@ -214,10 +214,15 @@ The most commonly used sandwich commands are:
    create     Create a namespace and a restrictive role
    delete     Delete a namespace and a restrictive role
    config     Print the kubeconfig for the restrictive role
+   drone      Print commands for adding restrictive role as secret in drone
+   gitlab     Print information for fields in Gitlab's Kubernetes config
 """,
         )
         parser.add_argument(
             "-n", "--namespace", help="Kubernetes namespace", required=True
+        )
+        parser.add_argument(
+            "-r", "--repo", help="repository for drone output", required=False
         )
         parser.add_argument(
             "--skip-namespace",
@@ -231,6 +236,7 @@ The most commonly used sandwich commands are:
         args = parser.parse_args()
 
         self.namespace = args.namespace
+        self.repo = args.repo
         self.skip_namespace = args.skip_namespace
 
         if not hasattr(self, args.command):
@@ -266,6 +272,53 @@ The most commonly used sandwich commands are:
                 get_endpoint(),
             )
         )
+
+    def drone(self):
+        if not self.repo:
+            print("drone output needs -r/--repo to output the drone command")
+            sys.exit(1)
+
+        endpoint = get_endpoint()
+        secret = get_secret_name(self.namespace)
+        cert = get_cert_b64(self.namespace, secret)
+        token = base64.b64decode(get_token_b64(self.namespace, secret)).decode("utf-8")
+
+        drone_cli_base = [
+            "drone",
+            "secret",
+            "add",
+            "--image=honestbee/drone-kubernetes",
+            self.repo,
+        ]
+        endpoint_cli = drone_cli_base + ["KUBERNETES_SERVER", endpoint]
+        cert_cli = drone_cli_base + ["KUBERNETES_CERT", cert]
+        token_cli = drone_cli_base + ["KUBERNETES_TOKEN", token]
+        print(" ".join(endpoint_cli))
+        print(" ".join(cert_cli))
+        print(" ".join(token_cli))
+
+    def gitlab(self):
+        endpoint = get_endpoint()
+        secret = get_secret_name(self.namespace)
+        cert = base64.b64decode(get_cert_b64(self.namespace, secret)).decode('utf-8')
+        token = base64.b64decode(get_token_b64(self.namespace, secret)).decode('utf-8')
+
+        print('Add the following to your Gitlab under "Kubernetes cluster details"')
+        print()
+        print('Kubernetes cluster name:')
+        print('Descriptive name of your choice (e.g. gitlab-cluster)')
+        print()
+        print('API URL:')
+        print(endpoint)
+        print()
+        print('CA Certifcate:')
+        print(cert)
+        print()
+        print('Token:')
+        print(token)
+        print()
+        print('Project namespace (optional, unique):')
+        print(self.namespace)
 
 
 if __name__ == "__main__":
