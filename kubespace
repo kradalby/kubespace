@@ -1,0 +1,272 @@
+#!/usr/bin/env python3
+
+import argparse
+import base64
+import sys
+from subprocess import run
+
+
+def get_secret_name(namespace):
+    sa = "{}-user".format(namespace)
+    cli = [
+        "kubectl",
+        "-n",
+        namespace,
+        "get",
+        "serviceaccount",
+        sa,
+        "-o",
+        'jsonpath="{.secrets[0].name}"',
+    ]
+    r = run(" ".join(cli), shell=True, check=True, capture_output=True)
+    return r.stdout.decode("utf-8")
+
+
+def get_token_b64(namespace, secret_name):
+    cli = [
+        "kubectl",
+        "-n",
+        namespace,
+        "get",
+        "secret",
+        secret_name,
+        "-o",
+        'jsonpath="{.data.token}"',
+    ]
+    r = run(" ".join(cli), shell=True, check=True, capture_output=True)
+    return r.stdout.decode("utf-8")
+
+
+def get_cert_b64(namespace, secret_name):
+    cli = [
+        "kubectl",
+        "-n",
+        namespace,
+        "get",
+        "secret",
+        secret_name,
+        "-o",
+        'jsonpath="{.data.ca\.crt}"',
+    ]
+    r = run(" ".join(cli), shell=True, check=True, capture_output=True)
+    return r.stdout.decode("utf-8")
+
+
+def get_endpoint():
+    cli = [
+        "kubectl",
+        "config",
+        "view",
+        "-o",
+        'jsonpath="{.clusters[0].cluster.server}"',
+    ]
+    r = run(" ".join(cli), shell=True, check=True, capture_output=True)
+    return r.stdout.decode("utf-8")
+
+
+def create_resource(yml):
+    cli = """ cat <<EOF | kubectl create -f -
+{yml}
+EOF""".format(
+        yml=yml
+    )
+    r = run(cli, shell=True, check=False, capture_output=True)
+    if r.stdout:
+        print(r.stdout.decode("utf-8"))
+    if r.stderr:
+        print(r.stderr.decode("utf-8"))
+
+
+def delete_resource(yml):
+    cli = """ cat <<EOF | kubectl delete -f -
+{yml}
+EOF""".format(
+        yml=yml
+    )
+    r = run(cli, shell=True, check=False, capture_output=True)
+    if r.stdout:
+        print(r.stdout.decode("utf-8"))
+    if r.stderr:
+        print(r.stderr.decode("utf-8"))
+
+
+def namespace_yaml(namespace):
+    yaml = """
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {namespace}
+""".format(
+        namespace=namespace
+    )
+    return yaml
+
+
+def service_account_yaml(namespace):
+    yaml = """
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {namespace}-user
+  namespace: {namespace}
+""".format(
+        namespace=namespace
+    )
+    return yaml
+
+
+def role_yaml(namespace):
+    yaml = """
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: {namespace}-user-full-access
+  namespace: {namespace}
+rules:
+- apiGroups: ["", "extensions", "apps"]
+  resources: ["*"]
+  verbs: ["*"]
+- apiGroups: ["batch"]
+  resources:
+  - jobs
+  - cronjobs
+  verbs: ["*"]
+""".format(
+        namespace=namespace
+    )
+    return yaml
+
+
+def role_binding_yaml(namespace):
+    yaml = """
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: {namespace}-user-view
+  namespace: {namespace}
+subjects:
+- kind: ServiceAccount
+  name: {namespace}-user
+  namespace: {namespace}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {namespace}-user-full-access
+""".format(
+        namespace=namespace
+    )
+    return yaml
+
+
+def create_config(namespace, certificate, token, endpoint):
+    yaml = """
+---
+apiVersion: v1
+kind: Config
+
+clusters:
+- cluster:
+    certificate-authority-data: {certificate}
+    server: {endpoint}
+  name: cluster
+
+users:
+- name: {namespace}-user
+  user:
+    client-key-data: {certificate}
+    token: {token}
+
+contexts:
+- context:
+    cluster: cluster
+    namespace: {namespace}
+    user: {namespace}-user
+  name: {namespace}
+
+current-context: {namespace}
+
+""".format(
+        namespace=namespace, certificate=certificate, token=token, endpoint=endpoint
+    )
+    return yaml
+
+
+def str2bool(v):
+    if v.lower() in ("yes", "true", "t", "y", "1"):
+        return True
+    elif v.lower() in ("no", "false", "f", "n", "0"):
+        return False
+    else:
+        raise argparse.ArgumentTypeError("Boolean value expected.")
+
+
+class Kubespace:
+    def __init__(self):
+        parser = argparse.ArgumentParser(
+            description="Kubespace - Create namespaces with limited access",
+            usage="""
+kubespace <command> [<args>]
+The most commonly used sandwich commands are:
+   create     Create a namespace and a restrictive role
+   delete     Delete a namespace and a restrictive role
+   config     Print the kubeconfig for the restrictive role
+""",
+        )
+        parser.add_argument(
+            "-n", "--namespace", help="Kubernetes namespace", required=True
+        )
+        parser.add_argument(
+            "--skip-namespace",
+            type=str2bool,
+            nargs="?",
+            const=True,
+            default=False,
+            help="Skip creation/deletion of namespace",
+        )
+        parser.add_argument("command", help="Operation")
+        args = parser.parse_args()
+
+        self.namespace = args.namespace
+        self.skip_namespace = args.skip_namespace
+
+        if not hasattr(self, args.command):
+            print("Unrecognized command")
+            parser.print_help()
+            sys.exit(1)
+        # use dispatch pattern to invoke method with same name
+        getattr(self, args.command)()
+
+    def create(self):
+        if not self.skip_namespace:
+            create_resource(namespace_yaml(self.namespace))
+        create_resource(service_account_yaml(self.namespace))
+        create_resource(role_yaml(self.namespace))
+        create_resource(role_binding_yaml(self.namespace))
+        print("Configuration for namespace:")
+        self.config()
+
+    def delete(self):
+        delete_resource(service_account_yaml(self.namespace))
+        delete_resource(role_yaml(self.namespace))
+        delete_resource(role_binding_yaml(self.namespace))
+        if not self.skip_namespace:
+            delete_resource(namespace_yaml(self.namespace))
+
+    def config(self):
+        secret = get_secret_name(self.namespace)
+        print(
+            create_config(
+                self.namespace,
+                get_cert_b64(self.namespace, secret),
+                base64.b64decode(get_token_b64(self.namespace, secret)).decode("utf-8"),
+                get_endpoint(),
+            )
+        )
+
+
+if __name__ == "__main__":
+    Kubespace()
