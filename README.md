@@ -18,7 +18,6 @@ pip install -U git+https://github.com/kradalby/kubespace.git
 ## Usage
 
 ```
-usage:
 kubespace <command> [<args>]
 The most commonly used sandwich commands are:
    create     Create a namespace and a restrictive role
