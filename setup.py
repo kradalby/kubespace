@@ -1,12 +1,12 @@
 __author__ = "Kristoffer Dalby <kradalby@kradalby.no>"
-__version__ = "0.0.1"
+__version__ = "0.0.0"
 
 from setuptools import setup
 import sys
 
 
 setup(
-    name="libsandwich",
+    name="kubespace",
     version=__version__,
     description="Tool (kubectl wrapper) to create namespaces and service accounts that can safely be handed to CI or users.",
     author=__author__,
