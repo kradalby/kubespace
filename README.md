@@ -23,5 +23,7 @@ The most commonly used sandwich commands are:
    create     Create a namespace and a restrictive role
    delete     Delete a namespace and a restrictive role
    config     Print the kubeconfig for the restrictive role
+   drone      Print commands for adding restrictive role as secret in drone
+   gitlab     Print information for fields in Gitlab's Kubernetes config
    -n/--namespace name of the namespace to manage
 ```
