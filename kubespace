@@ -288,9 +288,9 @@ The most commonly used sandwich commands are:
             "secret",
             "add",
             self.repo,
-            "--image=kradalby/drone-kubernetes-rolling",
+            "--image=quay.io/honestbee/drone-kubernetes",
         ]
-        endpoint_cli = drone_cli_base + ["--name=kubernetes_endpoint", "--value=" + endpoint]
+        endpoint_cli = drone_cli_base + ["--name=kubernetes_server", "--value=" + endpoint]
         cert_cli = drone_cli_base + ["--name=kubernetes_cert", "--value=" + cert]
         token_cli = drone_cli_base + ["--name=kubernetes_token", "--value=" + token]
         print(" ".join(endpoint_cli))
