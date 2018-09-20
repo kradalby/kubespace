@@ -2,28 +2,34 @@
 Tool to create namespaces and service accounts that can safely be handed to CI or users
 
 ## Install
-kubespace requires Python 3.7 or newer. The other requirement is kubectl in your path and cluster-admin\* access to the kubernetes cluster.
-
+You need go 1.11 (other might work) and cluster-admin\* access to the kubernetes cluster.
 ```
-pip install git+https://github.com/kradalby/kubespace.git
+go get github.com/kradalby/kubespace
 ```
-
-\* The ability to create namespaces
 
 ## Upgrade
 ```
-pip install -U git+https://github.com/kradalby/kubespace.git
+go get -u github.com/kradalby/kubespace
 ```
 
 ## Usage
 
 ```
-kubespace <command> [<args>]
-The most commonly used sandwich commands are:
-   create     Create a namespace and a restrictive role
-   delete     Delete a namespace and a restrictive role
-   config     Print the kubeconfig for the restrictive role
-   drone      Print commands for adding restrictive role as secret in drone
-   gitlab     Print information for fields in Gitlab's Kubernetes config
-   -n/--namespace name of the namespace to manage
+Usage:
+  kubespace [command]
+
+Available Commands:
+  config      A brief description of your command
+  create      Create a namespace with a restricted account
+  delete      Delete a namespace and the restricted account
+  drone       Output commands for adding secrets to drone CI
+  gitlab      Output configuration for GitLab CI
+  help        Help about any command
+
+Flags:
+  -h, --help               help for kubespace
+  -c, --kubeconf string    Path to kubeconfig (default "/home/kradalby/.kube/config")
+  -n, --namespace string   Namespace (required)
+
+Use "kubespace [command] --help" for more information about a command.
 ```
