@@ -7,6 +7,8 @@ You need go 1.11 (other might work) and cluster-admin\* access to the kubernetes
 go get github.com/kradalby/kubespace
 ```
 
+A pre-compiled binary is also available from [kubespace.kradalby.no](https://kubespace.kradalby.no)
+
 ## Upgrade
 ```
 go get -u github.com/kradalby/kubespace
