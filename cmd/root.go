@@ -57,9 +57,6 @@ func init() {
 
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.kubespace.yaml)")
 
-	rootCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", "", "Namespace (required)")
-	rootCmd.MarkPersistentFlagRequired("namespace")
-
 	home, err := homedir.Dir()
 	if err != nil {
 		panic(err)

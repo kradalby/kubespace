@@ -67,4 +67,7 @@ func init() {
 
 	droneCmd.Flags().StringVarP(&repo, "repo", "r", "", "drone repository to add secrets (required)")
 	droneCmd.MarkFlagRequired("repo")
+
+	droneCmd.Flags().StringVarP(&namespace, "namespace", "n", "", "Namespace (required)")
+	droneCmd.MarkFlagRequired("namespace")
 }

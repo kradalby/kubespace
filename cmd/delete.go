@@ -72,6 +72,8 @@ var deleteCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(deleteCmd)
 
+	deleteCmd.Flags().StringVarP(&namespace, "namespace", "n", "", "Namespace (required)")
+	deleteCmd.MarkFlagRequired("namespace")
 	deleteCmd.Flags().BoolVarP(&skipns, "skip-namespace", "s", false, "Skip namespace delete")
 	// Here you will define your flags and configuration settings.
 

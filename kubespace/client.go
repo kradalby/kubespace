@@ -40,6 +40,17 @@ func NewClient(kubeconf string) (*Client, error) {
 	return client, nil
 }
 
+func (c *Client) ListNamespaces() (*corev1.NamespaceList, error) {
+	list, err := c.client.CoreV1().Namespaces().List(metav1.ListOptions{
+		LabelSelector: "kubespace=true",
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return list, nil
+}
+
 func (c *Client) CreateNamespace(namespace string) error {
 	_, err := c.client.CoreV1().Namespaces().Create(&corev1.Namespace{
 		ObjectMeta: metav1.ObjectMeta{

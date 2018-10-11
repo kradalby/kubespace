@@ -84,6 +84,8 @@ Creates:
 func init() {
 	rootCmd.AddCommand(createCmd)
 
+	createCmd.Flags().StringVarP(&namespace, "namespace", "n", "", "Namespace (required)")
+	createCmd.MarkFlagRequired("namespace")
 	createCmd.Flags().BoolVarP(&skipns, "skip-namespace", "s", false, "Skip namespace creation")
 
 	// Cobra supports Persistent Flags which will work for this command
