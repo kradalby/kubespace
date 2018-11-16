@@ -21,7 +21,7 @@ pipeline:
 
   notify:
     image: drillster/drone-email
-    host: mail.ntnu.fap.no
+    host: smtp.fap.no
     port: 25
     from: drone@drone.fap.no
     recipients: [ kradalby@kradalby.no ]
