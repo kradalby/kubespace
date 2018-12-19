@@ -49,6 +49,11 @@ Creates:
 			panic(err)
 		}
 
+		err = client.CreateIfNotExistClusterRole()
+		if err != nil {
+			log.Printf("[Error] %s", err)
+		}
+
 		if !skipns {
 			err = client.CreateNamespace(namespace)
 			if err != nil {
@@ -59,6 +64,12 @@ Creates:
 		err = client.CreateServiceAccount(namespace)
 		if err != nil {
 			log.Printf("[Error] %s", err)
+		}
+
+		err = client.CreateIfNotExistServiceAccountClusterRoleBinding(namespace)
+		if err != nil {
+			// log.Printf("[Error] %s", err)
+			log.Println(err)
 		}
 
 		err = client.CreateServiceAccountRoleBinding(namespace)
