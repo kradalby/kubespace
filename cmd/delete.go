@@ -47,6 +47,11 @@ var deleteCmd = &cobra.Command{
 			log.Printf("[Error] %s", err)
 		}
 
+		err = client.DeleteServiceAccountClusterRoleBinding(namespace)
+		if err != nil {
+			log.Printf("[Error] %s", err)
+		}
+
 		err = client.DeleteServiceAccountRoleBinding(namespace)
 		if err != nil {
 			log.Printf("[Error] %s", err)
