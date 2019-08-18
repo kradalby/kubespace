@@ -56,9 +56,9 @@ var droneCmd = &cobra.Command{
 			log.Printf("[Error] %s", err)
 		}
 
-		fmt.Printf("drone secret add %s --image=quay.io/honestbee/drone-kubernetes --name=kubernetes_server --value=%s\n", repo, endpoint)
-		fmt.Printf("drone secret add %s --image=quay.io/honestbee/drone-kubernetes --name=kubernetes_cert --value=%s\n", repo, certificate)
-		fmt.Printf("drone secret add %s --image=quay.io/honestbee/drone-kubernetes --name=kubernetes_token --value=%s\n", repo, token)
+		fmt.Printf("drone secret add %s --name kubernetes_server --data %s\n", repo, endpoint)
+		fmt.Printf("drone secret add %s --name kubernetes_cert --data %s\n", repo, certificate)
+		fmt.Printf("drone secret add %s --name kubernetes_token --data %s\n", repo, token)
 	},
 }
 
