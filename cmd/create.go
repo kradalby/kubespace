@@ -86,9 +86,12 @@ Creates:
 		if err != nil {
 			log.Printf("[Error] %s", err)
 		}
-		fmt.Println()
-		fmt.Println("Configuration for namespace:")
-		fmt.Println(config)
+
+		if !silent {
+			fmt.Println()
+			fmt.Println("Configuration for namespace:")
+			fmt.Println(config)
+		}
 	},
 }
 
@@ -96,6 +99,7 @@ func init() {
 	rootCmd.AddCommand(createCmd)
 
 	createCmd.Flags().StringVarP(&namespace, "namespace", "n", "", "Namespace (required)")
+	createCmd.Flags().BoolVarP(&silent, "silent", "o", false, "Do not output configuration")
 	createCmd.MarkFlagRequired("namespace")
 	createCmd.Flags().BoolVarP(&skipns, "skip-namespace", "s", false, "Skip namespace creation")
 
