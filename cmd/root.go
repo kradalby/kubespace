@@ -33,6 +33,7 @@ import (
 var cfgFile string
 var kubeconf string
 var namespace string
+var silent bool
 var skipns bool
 
 // rootCmd represents the base command when called without any subcommands

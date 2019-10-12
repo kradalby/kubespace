@@ -100,6 +100,11 @@ func (c *Client) CreateNamespace(namespace string) error {
 			Labels: getLabels(),
 		},
 	})
+
+	if kubernetesErrors.IsAlreadyExists(err) {
+		return nil
+	}
+
 	return err
 }
 
@@ -119,7 +124,11 @@ func (c *Client) CreateServiceAccount(namespace string) error {
 		},
 	}
 
-	serviceAccount, err := c.client.CoreV1().ServiceAccounts(namespace).Create(serviceAccount)
+	_, err := c.client.CoreV1().ServiceAccounts(namespace).Create(serviceAccount)
+
+	if kubernetesErrors.IsAlreadyExists(err) {
+		return nil
+	}
 
 	return err
 }
@@ -153,6 +162,11 @@ func (c *Client) CreateRole(namespace string) error {
 	}
 
 	_, err := c.client.RbacV1().Roles(namespace).Create(&role)
+
+	if kubernetesErrors.IsAlreadyExists(err) {
+		return nil
+	}
+
 	return err
 }
 
@@ -193,6 +207,10 @@ func (c *Client) CreateServiceAccountClusterRoleBinding(namespace string) error 
 
 	_, err := c.client.RbacV1().ClusterRoleBindings().Create(&roleBinding)
 
+	if kubernetesErrors.IsAlreadyExists(err) {
+		return nil
+	}
+
 	return err
 }
 
@@ -224,6 +242,10 @@ func (c *Client) CreateServiceAccountRoleBinding(namespace string) error {
 		}}
 
 	_, err := c.client.RbacV1().RoleBindings(namespace).Create(&roleBinding)
+
+	if kubernetesErrors.IsAlreadyExists(err) {
+		return nil
+	}
 
 	return err
 }

@@ -24,3 +24,5 @@ require (
 	k8s.io/apimachinery v0.0.0-20180619225948-e386b2658ed2
 	k8s.io/client-go v7.0.0+incompatible
 )
+
+go 1.13
