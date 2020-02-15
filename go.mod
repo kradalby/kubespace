@@ -1,22 +1,14 @@
 module github.com/kradalby/kubespace
 
+go 1.13
+
 require (
-	github.com/ghodss/yaml v1.0.0 // indirect
-	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b // indirect
-	github.com/googleapis/gnostic v0.2.0 // indirect
-	github.com/howeyc/gopass v0.0.0-20170109162249-bf9dde6d0d2c // indirect
-	github.com/imdario/mergo v0.3.6 // indirect
-	github.com/inconshreveable/mousetrap v1.0.0 // indirect
-	github.com/json-iterator/go v1.1.5 // indirect
+	github.com/imdario/mergo v0.3.8 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
-	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
-	github.com/modern-go/reflect2 v1.0.1 // indirect
-	github.com/spf13/cobra v0.0.3
-	github.com/spf13/viper v1.2.0
-	golang.org/x/time v0.0.0-20180412165947-fbb02b2291d2 // indirect
+	github.com/spf13/cobra v0.0.5
+	github.com/spf13/viper v1.6.2
 	k8s.io/api v0.17.3
 	k8s.io/apimachinery v0.17.3
-	k8s.io/client-go v7.0.0+incompatible
+	k8s.io/client-go v11.0.0+incompatible
+	k8s.io/utils v0.0.0-20200124190032-861946025e34 // indirect
 )
-
-go 1.13
