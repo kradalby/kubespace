@@ -14,7 +14,7 @@ require (
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/viper v1.2.0
 	golang.org/x/time v0.0.0-20180412165947-fbb02b2291d2 // indirect
-	k8s.io/api v0.0.0-20180913155108-f456898a08e4
+	k8s.io/api v0.17.3
 	k8s.io/apimachinery v0.17.3
 	k8s.io/client-go v7.0.0+incompatible
 )
