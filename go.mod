@@ -7,7 +7,10 @@ require (
 	github.com/howeyc/gopass v0.0.0-20170109162249-bf9dde6d0d2c // indirect
 	github.com/imdario/mergo v0.3.6 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
-	github.com/mitchellh/go-homedir v1.0.0
+	github.com/json-iterator/go v1.1.5 // indirect
+	github.com/mitchellh/go-homedir v1.1.0
+	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
+	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/viper v1.2.0
 	golang.org/x/time v0.0.0-20180412165947-fbb02b2291d2 // indirect
