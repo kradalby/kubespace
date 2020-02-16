@@ -12,9 +12,6 @@ steps:
   commands:
   - go get github.com/mitchellh/gox
   - gox -output="dist/{{.Dir}}_{{.OS}}_{{.Arch}}"
-  when:
-    branch:
-    - master
 
 - name: deploy
   pull: if-not-exists
@@ -30,6 +27,9 @@ steps:
   environment:
     SSH_KEY:
       from_secret: ssh_key
+  when:
+    branch:
+    - master
 
 - name: notify
   pull: if-not-exists
