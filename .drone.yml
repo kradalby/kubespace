@@ -6,43 +6,45 @@ platform:
   arch: amd64
 
 steps:
-- name: build
-  pull: if-not-exists
-  image: golang:1.13.8-stretch
-  commands:
-  - go get github.com/mitchellh/gox
-  - gox -output="dist/{{.Dir}}_{{.OS}}_{{.Arch}}"
+  - name: build
+    pull: if-not-exists
+    image: golang:1.13.8-stretch
+    commands:
+      - go get github.com/mitchellh/gox
+      - gox -output="dist/{{.Dir}}_{{.OS}}_{{.Arch}}"
 
-- name: deploy
-  pull: if-not-exists
-  image: appleboy/drone-scp
-  settings:
-    host: storage.terra.fap.no
-    rm: true
-    source:
-    - dist/*
-    strip_components: 1
-    target: /storage/nfs/k8s/builds/kubespace
-    username: deploy
-  environment:
-    SSH_KEY:
-      from_secret: ssh_key
-  when:
-    branch:
-    - master
+  - name: deploy
+    pull: if-not-exists
+    image: appleboy/drone-scp
+    settings:
+      host: storage.terra.fap.no
+      rm: true
+      source:
+        - dist/*
+      strip_components: 1
+      target: /storage/nfs/k8s/builds/kubespace
+      username: deploy
+    environment:
+      SSH_KEY:
+        from_secret: ssh_key
+    when:
+      branch:
+        - master
+      event:
+        - push
 
-- name: notify
-  pull: if-not-exists
-  image: drillster/drone-email
-  settings:
-    from: drone@drone.fap.no
-    host: smtp.fap.no
-    port: 25
-    recipients:
-    - kradalby@kradalby.no
-    skip_verify: true
-  when:
-    status:
-    - success
-    - changed
-    - failure
+  - name: notify
+    pull: if-not-exists
+    image: drillster/drone-email
+    settings:
+      from: drone@drone.fap.no
+      host: smtp.fap.no
+      port: 25
+      recipients:
+        - kradalby@kradalby.no
+      skip_verify: true
+    when:
+      status:
+        - success
+        - changed
+        - failure
