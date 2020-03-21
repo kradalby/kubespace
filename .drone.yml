@@ -8,7 +8,7 @@ platform:
 steps:
   - name: build
     pull: if-not-exists
-    image: golang:1.14.0-stretch
+    image: golang:1.14.1-stretch
     commands:
       - go get github.com/mitchellh/gox
       - gox -output="dist/{{.Dir}}_{{.OS}}_{{.Arch}}"
