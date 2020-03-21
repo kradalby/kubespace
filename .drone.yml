@@ -1,9 +1,9 @@
 kind: pipeline
+type: kubernetes
 name: default
 
-platform:
-  os: linux
-  arch: amd64
+node_selector:
+  drone: "true"
 
 steps:
   - name: build
