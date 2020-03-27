@@ -14,7 +14,7 @@ steps:
       - gox -output="dist/{{.Dir}}_{{.OS}}_{{.Arch}}"
 
   - name: deploy
-    pull: if-not-exists
+    pull: always
     image: appleboy/drone-scp
     settings:
       host: storage.terra.fap.no
@@ -32,22 +32,6 @@ steps:
         - master
       event:
         - push
-
-  - name: notify
-    pull: if-not-exists
-    image: drillster/drone-email
-    settings:
-      from: drone@drone.fap.no
-      host: smtp.fap.no
-      port: 25
-      recipients:
-        - kradalby@kradalby.no
-      skip_verify: true
-    when:
-      status:
-        - success
-        - changed
-        - failure
 
 ---
 kind: secret
