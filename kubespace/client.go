@@ -2,8 +2,12 @@ package kubespace
 
 import (
 	"bytes"
+	"context"
 	b64 "encoding/base64"
 	"errors"
+	"strings"
+	"text/template"
+
 	corev1 "k8s.io/api/core/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
 	kubernetesErrors "k8s.io/apimachinery/pkg/api/errors"
@@ -11,8 +15,6 @@ import (
 	kubernetes "k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
-	"strings"
-	"text/template"
 )
 
 var clusterRoleName string = "kubespace-clusterrole"
@@ -44,7 +46,7 @@ func NewClient(kubeconf string) (*Client, error) {
 }
 
 func (c *Client) ListNamespaces() (*corev1.NamespaceList, error) {
-	list, err := c.client.CoreV1().Namespaces().List(metav1.ListOptions{
+	list, err := c.client.CoreV1().Namespaces().List(context.TODO(), metav1.ListOptions{
 		LabelSelector: "kubespace=true",
 	})
 	if err != nil {
@@ -84,22 +86,22 @@ func (c *Client) CreateClusterRole() error {
 		},
 	}
 
-	_, err := c.client.RbacV1().ClusterRoles().Create(&role)
+	_, err := c.client.RbacV1().ClusterRoles().Create(context.TODO(), &role, metav1.CreateOptions{})
 	return err
 }
 
 func (c *Client) DeleteClusterRole() error {
-	err := c.client.RbacV1().ClusterRoles().Delete(clusterRoleName, &metav1.DeleteOptions{})
+	err := c.client.RbacV1().ClusterRoles().Delete(context.TODO(), clusterRoleName, metav1.DeleteOptions{})
 	return err
 }
 
 func (c *Client) CreateNamespace(namespace string) error {
-	_, err := c.client.CoreV1().Namespaces().Create(&corev1.Namespace{
+	_, err := c.client.CoreV1().Namespaces().Create(context.TODO(), &corev1.Namespace{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:   namespace,
 			Labels: getLabels(),
 		},
-	})
+	}, metav1.CreateOptions{})
 
 	if kubernetesErrors.IsAlreadyExists(err) {
 		return nil
@@ -109,7 +111,7 @@ func (c *Client) CreateNamespace(namespace string) error {
 }
 
 func (c *Client) DeleteNamespace(namespace string) error {
-	err := c.client.CoreV1().Namespaces().Delete(namespace, &metav1.DeleteOptions{})
+	err := c.client.CoreV1().Namespaces().Delete(context.TODO(), namespace, metav1.DeleteOptions{})
 	return err
 }
 
@@ -124,7 +126,7 @@ func (c *Client) CreateServiceAccount(namespace string) error {
 		},
 	}
 
-	_, err := c.client.CoreV1().ServiceAccounts(namespace).Create(serviceAccount)
+	_, err := c.client.CoreV1().ServiceAccounts(namespace).Create(context.TODO(), serviceAccount, metav1.CreateOptions{})
 
 	if kubernetesErrors.IsAlreadyExists(err) {
 		return nil
@@ -134,7 +136,7 @@ func (c *Client) CreateServiceAccount(namespace string) error {
 }
 
 func (c *Client) DeleteServiceAccount(namespace string) error {
-	err := c.client.CoreV1().ServiceAccounts(namespace).Delete(getServiceAccountName(namespace), &metav1.DeleteOptions{})
+	err := c.client.CoreV1().ServiceAccounts(namespace).Delete(context.TODO(), getServiceAccountName(namespace), metav1.DeleteOptions{})
 	return err
 }
 
@@ -161,7 +163,7 @@ func (c *Client) CreateRole(namespace string) error {
 		},
 	}
 
-	_, err := c.client.RbacV1().Roles(namespace).Create(&role)
+	_, err := c.client.RbacV1().Roles(namespace).Create(context.TODO(), &role, metav1.CreateOptions{})
 
 	if kubernetesErrors.IsAlreadyExists(err) {
 		return nil
@@ -171,7 +173,7 @@ func (c *Client) CreateRole(namespace string) error {
 }
 
 func (c *Client) DeleteRole(namespace string) error {
-	err := c.client.RbacV1().Roles(namespace).Delete(getRoleName(namespace), &metav1.DeleteOptions{})
+	err := c.client.RbacV1().Roles(namespace).Delete(context.TODO(), getRoleName(namespace), metav1.DeleteOptions{})
 	return err
 }
 
@@ -205,7 +207,7 @@ func (c *Client) CreateServiceAccountClusterRoleBinding(namespace string) error 
 			APIGroup: "rbac.authorization.k8s.io",
 		}}
 
-	_, err := c.client.RbacV1().ClusterRoleBindings().Create(&roleBinding)
+	_, err := c.client.RbacV1().ClusterRoleBindings().Create(context.TODO(), &roleBinding, metav1.CreateOptions{})
 
 	if kubernetesErrors.IsAlreadyExists(err) {
 		return nil
@@ -215,7 +217,7 @@ func (c *Client) CreateServiceAccountClusterRoleBinding(namespace string) error 
 }
 
 func (c *Client) DeleteServiceAccountClusterRoleBinding(namespace string) error {
-	err := c.client.RbacV1().ClusterRoleBindings().Delete(getClusterRoleBindingName(namespace), &metav1.DeleteOptions{})
+	err := c.client.RbacV1().ClusterRoleBindings().Delete(context.TODO(), getClusterRoleBindingName(namespace), metav1.DeleteOptions{})
 	return err
 }
 
@@ -241,7 +243,7 @@ func (c *Client) CreateServiceAccountRoleBinding(namespace string) error {
 			APIGroup: "rbac.authorization.k8s.io",
 		}}
 
-	_, err := c.client.RbacV1().RoleBindings(namespace).Create(&roleBinding)
+	_, err := c.client.RbacV1().RoleBindings(namespace).Create(context.TODO(), &roleBinding, metav1.CreateOptions{})
 
 	if kubernetesErrors.IsAlreadyExists(err) {
 		return nil
@@ -251,13 +253,13 @@ func (c *Client) CreateServiceAccountRoleBinding(namespace string) error {
 }
 
 func (c *Client) DeleteServiceAccountRoleBinding(namespace string) error {
-	err := c.client.RbacV1().RoleBindings(namespace).Delete(getRoleBindingName(namespace), &metav1.DeleteOptions{})
+	err := c.client.RbacV1().RoleBindings(namespace).Delete(context.TODO(), getRoleBindingName(namespace), metav1.DeleteOptions{})
 	return err
 }
 
 func (c *Client) getServiceAccount(namespace string) (*corev1.ServiceAccount, error) {
 	serviceAccountName := getServiceAccountName(namespace)
-	serviceAccount, err := c.client.CoreV1().ServiceAccounts(namespace).Get(serviceAccountName, metav1.GetOptions{})
+	serviceAccount, err := c.client.CoreV1().ServiceAccounts(namespace).Get(context.TODO(), serviceAccountName, metav1.GetOptions{})
 	if err != nil {
 		return nil, err
 	}
@@ -287,7 +289,7 @@ func (c *Client) getSecret(namespace string) (*corev1.Secret, error) {
 		return nil, err
 	}
 
-	secret, err := c.client.CoreV1().Secrets(namespace).Get(secretName, metav1.GetOptions{})
+	secret, err := c.client.CoreV1().Secrets(namespace).Get(context.TODO(), secretName, metav1.GetOptions{})
 	if err != nil {
 		return nil, err
 	}
