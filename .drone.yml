@@ -8,7 +8,7 @@ node_selector:
 steps:
   - name: build
     pull: if-not-exists
-    image: golang:1.14.2-stretch
+    image: golang:1.14.3-stretch
     commands:
       - go get github.com/mitchellh/gox
       - gox -output="dist/{{.Dir}}_{{.OS}}_{{.Arch}}"
