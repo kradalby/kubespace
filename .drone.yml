@@ -16,13 +16,11 @@
          "pull": "always"
       },
       {
-         "environment": [
-            {
-               "SSH_KEY": {
-                  "from_secret": "ssh_key"
-               }
+         "environment": {
+            "SSH_KEY": {
+               "from_secret": "ssh_key"
             }
-         ],
+         },
          "image": "appleboy/drone-scp",
          "name": "Deploy to builds",
          "pull": "always",
