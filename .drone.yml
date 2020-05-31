@@ -16,7 +16,7 @@
          "pull": "always"
       },
       {
-         "envs": [
+         "environment": [
             {
                "SSH_KEY": {
                   "from_secret": "ssh_key"
@@ -58,7 +58,7 @@
                "from_secret": "discord_webhook_token"
             }
          },
-         "when": {
+         "trigger": {
             "status": [
                "success",
                "changed",
