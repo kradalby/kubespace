@@ -11,7 +11,7 @@
             "go get github.com/mitchellh/gox",
             "gox -output=\"dist/{{.Dir}}_{{.OS}}_{{.Arch}}\""
          ],
-         "image": "golang:1.14.3-stretch",
+         "image": "golang:1.14.4-stretch",
          "name": "Go build",
          "pull": "always"
       },
@@ -34,7 +34,7 @@
             "target": "/storage/nfs/k8s/builds/kubespace",
             "username": "deploy"
          },
-         "trigger": {
+         "when": {
             "branch": [
                "master"
             ],
