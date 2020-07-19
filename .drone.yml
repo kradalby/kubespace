@@ -31,7 +31,7 @@
                "dist/*"
             ],
             "strip_components": 1,
-            "target": "/storage/nfs/k8s/builds/kubespace",
+            "target": "/storage/serve/builds/kubespace",
             "username": "deploy"
          },
          "when": {
