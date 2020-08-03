@@ -8,6 +8,23 @@
    "steps": [
       {
          "commands": [
+            "npm install prettier",
+            "npx prettier --check \"**/*.{ts,js,md,yaml,yml,sass,css,scss}\""
+         ],
+         "image": "node:lts",
+         "name": "prettier lint",
+         "pull": "always"
+      },
+      {
+         "commands": [
+            "golangci-lint run -v --timeout 10m --tests=false"
+         ],
+         "image": "golangci/golangci-lint:latest",
+         "name": "Go lint",
+         "pull": "always"
+      },
+      {
+         "commands": [
             "go get github.com/mitchellh/gox",
             "gox -output=\"dist/{{.Dir}}_{{.OS}}_{{.Arch}}\""
          ],
