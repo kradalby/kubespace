@@ -1,8 +1,11 @@
 # kubespace
+
 Tool to create namespaces and service accounts that can safely be handed to CI or users
 
 ## Install
+
 You need go 1.11 (other might work) and cluster-admin\* access to the kubernetes cluster.
+
 ```
 go get github.com/kradalby/kubespace
 ```
@@ -10,6 +13,7 @@ go get github.com/kradalby/kubespace
 A pre-compiled binary is also available from [builds.kradalby.no](https://builds.kradalby.no)
 
 ## Upgrade
+
 ```
 go get -u github.com/kradalby/kubespace
 ```
