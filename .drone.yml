@@ -17,14 +17,6 @@
       },
       {
          "commands": [
-            "golangci-lint run -v --timeout 10m --tests=false"
-         ],
-         "image": "golangci/golangci-lint:latest",
-         "name": "Go lint",
-         "pull": "always"
-      },
-      {
-         "commands": [
             "go test ./..."
          ],
          "image": "golang:1.14.4-stretch",
