@@ -6,8 +6,8 @@ GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) get
 GOMOD=$(GOCMD) mod
-BINARY_NAME=alertmanager-discord
-GO_MAIN=cmd/alertmanager-discord/main.go
+BINARY_NAME=kubespace
+GO_MAIN=main.go
 
 .PHONY: all vendor
 
