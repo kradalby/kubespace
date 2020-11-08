@@ -1,5 +1,11 @@
 ---
 {
+   "dns_config": {
+      "nameservers": [
+         "1.1.1.1",
+         "1.0.0.1"
+      ]
+   },
    "kind": "pipeline",
    "name": "Kubernetes",
    "node_selector": {
@@ -19,7 +25,7 @@
          "commands": [
             "go test ./..."
          ],
-         "image": "golang:1.14.4-stretch",
+         "image": "golang:1.15-buster",
          "name": "Go test",
          "pull": "always"
       },
@@ -28,7 +34,7 @@
             "go get github.com/mitchellh/gox",
             "gox -output=\"dist/{{.Dir}}_{{.OS}}_{{.Arch}}\""
          ],
-         "image": "golang:1.14.4-stretch",
+         "image": "golang:1.15-buster",
          "name": "Go build",
          "pull": "always"
       },
