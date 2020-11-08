@@ -36,7 +36,7 @@
       {
          "commands": [
             "go get github.com/mitchellh/gox",
-            "gox -output=\"dist/{{.Dir}}_{{.OS}}_{{.Arch}}\""
+            "gox -osarch \"!darwin/386\" -output=\"dist/{{.Dir}}_{{.OS}}_{{.Arch}}\""
          ],
          "image": "golang:1.15-buster",
          "name": "Go build",
