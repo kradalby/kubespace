@@ -39,7 +39,6 @@ repos:
     rev: v1.22.1
     hooks:
       - id: hadolint
-  # Go -------------------------
   - repo: https://github.com/golangci/golangci-lint
     rev: v1.37.0
     hooks:
@@ -59,4 +58,3 @@ repos:
     hooks:
       - id: gofmt
       - id: golint
-
