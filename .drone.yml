@@ -47,7 +47,7 @@
             "target": "/fastest/serve/builds/kubespace",
             "username": "deploy",
           },
-        "when": { "branch": ["master"], "event": ["push"] },
+        "when": { "branch": ["master", "main"], "event": ["push"] },
       },
       {
         "image": "appleboy/drone-discord",
@@ -61,7 +61,7 @@
           },
         "when":
           {
-            "branch": ["master"],
+            "branch": ["master", "main"],
             "event": ["push"],
             "status": ["success", "failure"],
           },
