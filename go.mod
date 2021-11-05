@@ -8,5 +8,5 @@ require (
 	github.com/spf13/viper v1.9.0
 	k8s.io/api v0.22.3
 	k8s.io/apimachinery v0.22.3
-	k8s.io/client-go v0.22.3
+	k8s.io/client-go v1.5.2
 )
