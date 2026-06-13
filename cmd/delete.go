@@ -78,7 +78,7 @@ func init() {
 	rootCmd.AddCommand(deleteCmd)
 
 	deleteCmd.Flags().StringVarP(&namespace, "namespace", "n", "", "Namespace (required)")
-	deleteCmd.MarkFlagRequired("namespace")
+	_ = deleteCmd.MarkFlagRequired("namespace")
 	deleteCmd.Flags().BoolVarP(&skipns, "skip-namespace", "s", false, "Skip namespace delete")
 	// Here you will define your flags and configuration settings.
 
@@ -104,9 +104,10 @@ func askForConfirmation(s string) bool {
 
 		response = strings.ToLower(strings.TrimSpace(response))
 
-		if response == "y" || response == "yes" {
+		switch response {
+		case "y", "yes":
 			return true
-		} else if response == "n" || response == "no" {
+		case "n", "no":
 			return false
 		}
 	}

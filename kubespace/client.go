@@ -280,7 +280,7 @@ func (c *Client) getSecretName(namespace string) (string, error) {
 		}
 
 	}
-	return "", errors.New("Could not find secret name")
+	return "", errors.New("could not find secret name")
 }
 
 func (c *Client) getSecret(namespace string) (*corev1.Secret, error) {

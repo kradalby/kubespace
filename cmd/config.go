@@ -57,7 +57,7 @@ func init() {
 	rootCmd.AddCommand(configCmd)
 
 	configCmd.Flags().StringVarP(&namespace, "namespace", "n", "", "Namespace (required)")
-	configCmd.MarkFlagRequired("namespace")
+	_ = configCmd.MarkFlagRequired("namespace")
 
 	// Here you will define your flags and configuration settings.
 
