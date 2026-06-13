@@ -23,18 +23,20 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"path/filepath"
 )
 
-var cfgFile string
-var kubeconf string
-var namespace string
-var silent bool
-var skipns bool
+var (
+	cfgFile   string
+	kubeconf  string
+	namespace string
+	silent    bool
+	skipns    bool
+)
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{

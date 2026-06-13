@@ -25,7 +25,6 @@ type Client struct {
 }
 
 func NewClient(kubeconf string) (*Client, error) {
-
 	config, err := clientcmd.BuildConfigFromFlags("", kubeconf)
 	if err != nil {
 		panic(err.Error())
@@ -73,12 +72,12 @@ func (c *Client) CreateClusterRole() error {
 			Labels: getLabels(),
 		},
 		Rules: []rbacv1.PolicyRule{
-			rbacv1.PolicyRule{
+			{
 				APIGroups: []string{""},
 				Resources: []string{"nodes", "persistentvolumes", "namespaces"},
 				Verbs:     []string{"list"},
 			},
-			rbacv1.PolicyRule{
+			{
 				APIGroups: []string{"storage.k8s.io"},
 				Resources: []string{"storageclasses"},
 				Verbs:     []string{"get", "list", "watch"},
@@ -150,12 +149,12 @@ func (c *Client) CreateRole(namespace string) error {
 			Labels:    getLabels(),
 		},
 		Rules: []rbacv1.PolicyRule{
-			rbacv1.PolicyRule{
+			{
 				APIGroups: []string{"", "extensions", "apps"},
 				Resources: []string{"*"},
 				Verbs:     []string{"*"},
 			},
-			rbacv1.PolicyRule{
+			{
 				APIGroups: []string{"batch"},
 				Resources: []string{"jobs", "cronjobs"},
 				Verbs:     []string{"*"},
@@ -205,7 +204,8 @@ func (c *Client) CreateServiceAccountClusterRoleBinding(namespace string) error 
 			Kind:     "ClusterRole",
 			Name:     clusterRoleName,
 			APIGroup: "rbac.authorization.k8s.io",
-		}}
+		},
+	}
 
 	_, err := c.client.RbacV1().ClusterRoleBindings().Create(context.TODO(), &roleBinding, metav1.CreateOptions{})
 
@@ -241,7 +241,8 @@ func (c *Client) CreateServiceAccountRoleBinding(namespace string) error {
 			Kind:     "Role",
 			Name:     roleName,
 			APIGroup: "rbac.authorization.k8s.io",
-		}}
+		},
+	}
 
 	_, err := c.client.RbacV1().RoleBindings(namespace).Create(context.TODO(), &roleBinding, metav1.CreateOptions{})
 
@@ -278,7 +279,6 @@ func (c *Client) getSecretName(namespace string) (string, error) {
 		if strings.Contains(secret.Name, "token") {
 			return secret.Name, nil
 		}
-
 	}
 	return "", errors.New("could not find secret name")
 }

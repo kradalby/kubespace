@@ -51,7 +51,6 @@ var listCmd = &cobra.Command{
 
 		fmt.Println()
 		fmt.Printf("Total: %d\n", len(list.Items))
-
 	},
 }
 

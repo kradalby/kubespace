@@ -70,7 +70,6 @@ Describes fields and and content to add to GitLab CI.
 		fmt.Println()
 		fmt.Println("Project namespace (optional, unique):")
 		fmt.Println(namespace)
-
 	},
 }
 
