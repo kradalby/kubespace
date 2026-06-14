@@ -1,6 +1,6 @@
 module github.com/kradalby/kubespace
 
-go 1.19
+go 1.26.4
 
 require (
 	github.com/mitchellh/go-homedir v1.1.0
