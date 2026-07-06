@@ -24,7 +24,7 @@ jobs:
         uses: NixOS/nix-installer-action@6b8548fe06acfb0155a50ab5d561accb215764cc # main
 
       - name: Setup Nix cache (hestia)
-        uses: Mic92/hestia/action@ff07bb902a9968ac0c3d0e51d90a606662a375d8 # main
+        uses: Mic92/hestia/action@ece9a6025bfa54b78de9469ecb852500cd10739a # main
 
       - name: build
         run: nix build -L .#checks.x86_64-linux.build
@@ -39,7 +39,7 @@ jobs:
         uses: NixOS/nix-installer-action@6b8548fe06acfb0155a50ab5d561accb215764cc # main
 
       - name: Setup Nix cache (hestia)
-        uses: Mic92/hestia/action@ff07bb902a9968ac0c3d0e51d90a606662a375d8 # main
+        uses: Mic92/hestia/action@ece9a6025bfa54b78de9469ecb852500cd10739a # main
 
       - name: gotest
         run: nix build -L .#checks.x86_64-linux.gotest
@@ -54,7 +54,7 @@ jobs:
         uses: NixOS/nix-installer-action@6b8548fe06acfb0155a50ab5d561accb215764cc # main
 
       - name: Setup Nix cache (hestia)
-        uses: Mic92/hestia/action@ff07bb902a9968ac0c3d0e51d90a606662a375d8 # main
+        uses: Mic92/hestia/action@ece9a6025bfa54b78de9469ecb852500cd10739a # main
 
       - name: golangci-lint
         run: nix build -L .#checks.x86_64-linux.golangci-lint
@@ -69,7 +69,7 @@ jobs:
         uses: NixOS/nix-installer-action@6b8548fe06acfb0155a50ab5d561accb215764cc # main
 
       - name: Setup Nix cache (hestia)
-        uses: Mic92/hestia/action@ff07bb902a9968ac0c3d0e51d90a606662a375d8 # main
+        uses: Mic92/hestia/action@ece9a6025bfa54b78de9469ecb852500cd10739a # main
 
       - name: formatting
         run: nix build -L .#checks.x86_64-linux.formatting
