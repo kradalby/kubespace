@@ -3,10 +3,10 @@ name: CI
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 
 # Gate jobs only call `nix build .#checks.<sys>.<name>`, so no `nix develop`
 # default shell is needed. The check logic lives in flake.nix.
